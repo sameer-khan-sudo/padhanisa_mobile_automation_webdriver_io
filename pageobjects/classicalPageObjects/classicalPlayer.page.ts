@@ -25,29 +25,56 @@ class ClassicalPlayerPage {
     public get bottomPlayerPauseButtonLocator() {
         return $(`android=new UiSelector().className("android.view.View").instance(21)`);
     }
-    get pauseButton() {
-        return $('button[title="Pause"]');
+
+    public fullPlayerSongNameLocator(songName: string) {
+        return $(`android=new UiSelector().description("${songName}")`)
     }
 
-    get nextButton() {
-        return $('button[title="Next"]');
-    }
+    async slideSeekbarToPercentage(
+        seekbarElement: ChainablePromiseElement,
+        percentage: number
+      ): Promise<void> {
+        const rect = await seekbarElement.getWindowRect(); // or getWindowRect() if needed
+        const startX = rect.x;
+        const startY = rect.y + rect.height / 2;
+        const targetX = startX + rect.width * (percentage / 100);
+      
+        await driver.performActions([{
+          type: 'pointer',
+          id: 'finger1',
+          parameters: { pointerType: 'touch' },
+          actions: [
+            { type: 'pointerMove', duration: 0, x: startX, y: startY },
+            { type: 'pointerDown', button: 0 },
+            { type: 'pointerMove', duration: 300, x: targetX, y: startY },
+            { type: 'pointerUp', button: 0 },
+          ]
+        }]);
+      }
+      
+    // get pauseButton() {
+    //     return $('button[title="Pause"]');
+    // }
 
-    get previousButton() {
-        return $('button[title="Previous"]');
-    }
+    // get nextButton() {
+    //     return $('button[title="Next"]');
+    // }
 
-    get volumeSlider() {
-        return $('input[type="range"]');
-    }
+    // get previousButton() {
+    //     return $('button[title="Previous"]');
+    // }
 
-    get currentTime() {
-        return $('.current-time');
-    }
+    // get volumeSlider() {
+    //     return $('input[type="range"]');
+    // }
 
-    get duration() {
-        return $('.duration');
-    }
+    // get currentTime() {
+    //     return $('.current-time');
+    // }
+
+    // get duration() {
+    //     return $('.duration');
+    // }
 }
 
 export default new ClassicalPlayerPage();

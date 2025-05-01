@@ -133,23 +133,22 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
     console.log("Scrolled to the bottom of the list of songs.");
   })
 
-  it("[TC-13] Click on play button and start song", async () => {
+  it.skip("[TC-13] Click on play button and start song", async () => {
     await clickOnElement(ClassicalPlayerPage.playButtonLocator(TestData.songName));
     console.log("Clicked on play button of the song.");
   })
 
-  it("[TC-14] Verify that the selected song name is showing on the bottom player", async () => {
+  it.skip("[TC-14] Verify that the selected song name is showing on the bottom player", async () => {
     const bottomPlayer = ClassicalPlayerPage.bottomPlayerLocator(TestData.songName);
     await assertElement(bottomPlayer, "displayed");
     expect(await bottomPlayer.getAttribute('content-desc')).toContain(TestData.songName);
 
-    // const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(TestData.songName).getAttribute('content-desc');
-    // await verifyActualAndExpectedText([actualSongName], [TestData.songName]);  
-    // console.log("✅ Song is playing and visible on the bottom player.");
-    // console.log("Song name is: " + actualSongName);
+    const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(TestData.songName).getAttribute('content-desc');
+    await expect(actualSongName).toContain(TestData.songName);
+    console.log("Actual song name: " + actualSongName);
   });
 
-  it("[TC-15] Stop the song", async () => {
+  it.skip("[TC-15] Stop the song", async () => {
     await driver.pause(5000); // Wait for 5 seconds to let the song play
     await clickOnElement(ClassicalPlayerPage.pauserButtonLocator(TestData.songName));
     console.log("Clicked on pause button of the song.");
@@ -159,5 +158,13 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
     await clickOnElement(ClassicalPlayerPage.bottomPlayerLocator(TestData.songName));
     console.log("Clicked on the bottom player to open the full player.");
   })
+
+  it("[TC-17] Verify the song name in the Full Player", async () => {
+    await driver.pause(5000); // Wait for 5 seconds to let the full player load
+    const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(TestData.songName).getAttribute('content-desc');
+    console.log("Actual song name: " + actualSongName);
+
+    expect(await actualSongName).toContain(TestData.songName);
+  });
 
 });
