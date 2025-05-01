@@ -1,5 +1,5 @@
 import { ChainablePromiseElement } from "webdriverio";
-import { clickOnElement, enterTextInField } from "../utils/common.utils";
+import { clickOnElement, enterTextInField } from "../utils/commonUtils";
 
 class CreateProfilePage {
     // Generate Random Mobile Number

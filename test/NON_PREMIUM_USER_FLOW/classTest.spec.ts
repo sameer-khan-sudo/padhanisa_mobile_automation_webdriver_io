@@ -1,15 +1,15 @@
-import LoginPage from "../../pageobjects/login.page";
-import SelectProfilePage from "../../pageobjects/selectProfile.page";
-import SongListing from "../../pageobjects/songListing.page";
-import premiumPlanPage from "../../pageobjects/premiumPlan.page";
+import LoginPage from "../../pageObjects/login.page";
+import SelectProfilePage from "../../pageObjects/selectProfile.page";
+import SongListing from "../../pageObjects/songListing.page";
+import premiumPlanPage from "../../pageObjects/premiumPlan.page";
 
 import {
     assertElement,
     clickOnElement,
     // enterTextInField,
     verifyActualAndExpectedText
-} from "../../utils/common.utils";
-import nudgesPage from "../../pageobjects/nudges.page";
+} from "../../utils/commonUtils";
+import nudgesPage from "../../pageObjects/nudges.page";
 
 // Utility Logger for Consistent Logs
 function logInfo(message: string) {

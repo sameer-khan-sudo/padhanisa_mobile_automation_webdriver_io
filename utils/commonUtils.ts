@@ -136,3 +136,23 @@ export async function verifyActualAndExpectedText(textElementLocators: Chainable
     }
   }
 }
+
+// Scroll the list of content
+export async function scrollContainerToBottom(uiSelector: string, scrollDirection: string) {
+  let previousSource = '';
+  let currentSource = '';
+  let scrollCount = 0;
+
+  do {
+    previousSource = currentSource;
+    console.log(`Scrolling attempt ${++scrollCount}...`);
+
+    //   await $(`android=new UiScrollable(${uiSelector}).scrollForward()`);
+    await $(`android=new UiScrollable(${uiSelector}).${scrollDirection}()`);
+    // await driver.pause(1000); // Give time for UI/content to update
+
+    currentSource = await driver.getPageSource();
+  } while (currentSource !== previousSource);
+
+  console.log("Reached the bottom of the container after", scrollCount, "scrolls.");
+}

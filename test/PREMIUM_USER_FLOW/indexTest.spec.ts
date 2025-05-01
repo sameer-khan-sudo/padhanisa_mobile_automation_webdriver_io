@@ -1,5 +1,5 @@
-import LoginPage from "../../pageobjects/login.page";
-import { clickOnElement } from "../../utils/common.utils";
+import LoginPage from "../../pageObjects/login.page";
+import { clickOnElement } from "../../utils/commonUtils";
 
 describe("PADHANISA App", () => {
 

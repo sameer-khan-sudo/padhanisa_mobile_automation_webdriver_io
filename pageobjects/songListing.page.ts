@@ -1,4 +1,4 @@
-import { clickOnElement, enterTextInField } from "../utils/common.utils";
+import { clickOnElement, enterTextInField } from "../utils/commonUtils";
 
 class SongListingPage {
 

@@ -1,5 +1,5 @@
 import { ChainablePromiseElement } from "webdriverio";
-import { clickOnElement, closeKeyboard } from "../utils/common.utils";
+import { clickOnElement, closeKeyboard } from "../utils/commonUtils";
 
 // Locators 
 class LoginPage {

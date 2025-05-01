@@ -1,11 +1,11 @@
-import LoginPage from "../../pageobjects/login.page";
-import CreateProfile from "../../pageobjects/createProfile.page";
-import premiumPlanPage from "../../pageobjects/premiumPlan.page";
+import LoginPage from "../../pageObjects/login.page";
+import CreateProfile from "../../pageObjects/createProfile.page";
+import premiumPlanPage from "../../pageObjects/premiumPlan.page";
 import {
     assertElement,
     clickOnElement,
     verifyActualAndExpectedText,
-} from "../../utils/common.utils";
+} from "../../utils/commonUtils";
 
 describe("Create New User Profile", () => {
     let mobileNumber: string;

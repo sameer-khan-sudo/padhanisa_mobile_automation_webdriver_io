@@ -1,18 +1,18 @@
 // Page Object Imports
-import LoginPage from "../../pageobjects/login.page";
-import HomescreenPage from "../../pageobjects/homeScreen.page";
-import SelectProfilePage from "../../pageobjects/selectProfile.page";
-import SongListingPage from "../../pageobjects/songListing.page";
-import PlanNudgesPage from "../../pageobjects/planNudges.page";
-import SingASongPage from "../../pageobjects/singASong.page";
-import GoPremiumPlanPage from "../../pageobjects/goPremiumPlan.page";
+import LoginPage from "../../pageObjects/login.page";
+import HomescreenPage from "../../pageObjects/homeScreen.page";
+import SelectProfilePage from "../../pageObjects/selectProfile.page";
+import SongListingPage from "../../pageObjects/songListing.page";
+import PlanNudgesPage from "../../pageObjects/planNudges.page";
+import SingASongPage from "../../pageObjects/singASong.page";
+import GoPremiumPlanPage from "../../pageObjects/goPremiumPlan.page";
 
 // Utility Imports
 import {
     assertElement,
     clickOnElement,
     verifyActualAndExpectedText,
-} from "../../utils/common.utils";
+} from "../../utils/commonUtils";
 import { logInfo, logError, logSuccess } from "../../utils/log.utils";
 
 // Constants

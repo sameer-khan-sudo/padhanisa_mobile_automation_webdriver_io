@@ -1,4 +1,4 @@
-import { clickOnElement } from "../utils/common.utils";
+import { clickOnElement } from "../utils/commonUtils";
 
 class SelectProfilePage {
 
