@@ -1,5 +1,7 @@
 class ClassicalPlayerPage {
-    [x: string]: any;
+    public get seekBarLocator() {
+      return $(`android=android=new UiSelector().descriptionContains("%")`)
+    }
 
     public songNameFieldLocator(songName: string) : ChainablePromiseElement {
 
@@ -52,10 +54,6 @@ class ClassicalPlayerPage {
         }]);
       }
       
-    // get pauseButton() {
-    //     return $('button[title="Pause"]');
-    // }
-
     // get nextButton() {
     //     return $('button[title="Next"]');
     // }

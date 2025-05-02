@@ -156,3 +156,52 @@ export async function scrollContainerToBottom(uiSelector: string, scrollDirectio
 
   console.log("Reached the bottom of the container after", scrollCount, "scrolls.");
 }
+
+
+// Drag/Seek the player seekbar (progress bar)
+export async function dragSeekBar(percentage: number) {
+  try {
+    // Validate input
+    if (percentage < 0 || percentage > 100) {
+      throw new Error(`Invalid percentage value: ${percentage}. Must be between 0 and 100.`);
+    }
+
+    await driver.pause(500); // Wait for the seek bar to stabilize
+
+    const seekBar = await $(`android=new UiSelector().descriptionContains("%")`);
+    const isDisplayed = await seekBar.isDisplayed();
+
+    if (!isDisplayed) {
+      throw new Error("Seekbar element is not visible on the screen.");
+    }
+
+    const { x, y } = await seekBar.getLocation();
+    const { width, height } = await seekBar.getSize();
+
+    const centerY = Math.floor(y + height / 2);
+    const startX = Math.floor(x);
+    const endX = Math.floor(x + width * (percentage / 100));
+
+    console.log(`Dragging seekbar from X: ${startX} to X: ${endX} at Y: ${centerY}`);
+
+    await driver.performActions([{
+      type: 'pointer',
+      id: 'finger1',
+      parameters: { pointerType: 'touch' },
+      actions: [
+        { type: 'pointerMove', duration: 0, x: startX, y: centerY },
+        { type: 'pointerDown', button: 0 },
+        { type: 'pause', duration: 500 },
+        { type: 'pointerMove', duration: 500, x: endX, y: centerY },
+        { type: 'pointerUp', button: 0 },
+      ],
+    }]);
+
+    await driver.releaseActions();
+
+    // console.log(`Seekbar dragged successfully to ${percentage}%`);
+  } catch (error) {
+    console.error(`Failed to drag seekbar to ${percentage}%:`, error);
+    throw error; // Re-throw to allow test failure/reporting
+  }
+}
