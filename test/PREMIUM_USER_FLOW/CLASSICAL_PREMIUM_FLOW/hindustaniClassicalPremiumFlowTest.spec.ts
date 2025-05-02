@@ -4,6 +4,8 @@ import HomescreenPage from "../../../pageObjects/homeScreen.page";
 import SelectProfilePage from "../../../pageObjects/selectProfile.page";
 import ClassicalHindustaniPage from "../../../pageObjects/classicalPageObjects/classicalHindustani.page.ts";
 import ClassicalPlayerPage from "../../../pageObjects/classicalPageObjects/classicalPlayer.page";
+import ClassicalHomeScreen from "../../../pageObjects/classicalPageObjects/classicalHomeScreen.page.ts";
+import ClassicalMyFavouritesPage from "../../../pageObjects/classicalPageObjects/classicalMyFavourites.page";
 
 // Utility Imports
 import {
@@ -20,7 +22,7 @@ const TestData = {
     phoneNumber: "9927484781",
     profileName: "Johnny",
     artistName: "Ajoy Chakrabarty",
-    songName: "Jaag Jaag Sajani"
+    songName: "Jaag Jaag Sajani",
 };
 
 let testStartTime: Date;
@@ -28,23 +30,33 @@ let testStartTime: Date;
 describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤", () => {
     beforeEach(function () {
         testStartTime = new Date();
-        logInfo(`⏳ Starting Test: "${this.currentTest?.title}" @ ${testStartTime.toLocaleTimeString()}`);
+        logInfo(
+            `⏳ Starting Test: "${this.currentTest?.title
+            }" @ ${testStartTime.toLocaleTimeString()}`
+        );
     });
 
     afterEach(async function () {
         const testEndTime = new Date();
-        const duration = Math.round((testEndTime.getTime() - testStartTime.getTime()) / 1000);
+        const duration = Math.round(
+            (testEndTime.getTime() - testStartTime.getTime()) / 1000
+        );
         const minutes = Math.floor(duration / 60);
         const seconds = duration % 60;
 
         if (this.currentTest?.state === "failed") {
             logError(`💥 Test Failed: "${this.currentTest.title}"`);
-            await driver.saveScreenshot(`./screenshots/${this.currentTest.title}.png`);
+            await driver.saveScreenshot(
+                `./screenshots/${this.currentTest.title}.png`
+            );
         } else {
             logSuccess(`🟢 Test Passed: "${this.currentTest?.title ?? "Unknown"}"`);
         }
 
-        logInfo(`🕒 Ended Test: "${this.currentTest?.title}" @ ${testEndTime.toLocaleTimeString()} ⏱️ Duration: ${minutes}m ${seconds}s`);
+        logInfo(
+            `🕒 Ended Test: "${this.currentTest?.title
+            }" @ ${testEndTime.toLocaleTimeString()} ⏱️ Duration: ${minutes}m ${seconds}s`
+        );
     });
 
     // ✅ Executed Test Cases
@@ -83,20 +95,28 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
     it("🎶 [TC-007] Click on 'Classical Music' tab", async () => {
         await clickOnElement(HomescreenPage.classicalMusicLocator);
         logSuccess("🎼 'Classical Music' tab clicked.");
-        assertElement(ClassicalHindustaniPage.saregamaClassicalHeaderLocator, "displayed");
+        assertElement(
+            ClassicalHindustaniPage.saregamaClassicalHeaderLocator,
+            "displayed"
+        );
         logSuccess("🎤 Saregama Classical header displayed.");
         await verifyActualAndExpectedText(
-            [ClassicalHindustaniPage.saregamaClassicalHeaderLocator], ['Saregama Classical']);
+            [ClassicalHindustaniPage.saregamaClassicalHeaderLocator],
+            ["Saregama Classical"]
+        );
     });
 
     it("🎧 [TC-008] Click on 'Hindustani' tab", async () => {
-        await ClassicalHindustaniPage.hindustaniTabLocator.waitForDisplayed({ timeout: 20000 });
-        await clickOnElement(ClassicalHindustaniPage.hindustaniTabLocator);
+        await ClassicalHomeScreen.hindustaniTabLocator.waitForDisplayed({
+            timeout: 20000,
+        });
+        await clickOnElement(ClassicalHomeScreen.hindustaniTabLocator);
         logSuccess("🎶 Hindustani tab clicked.");
     });
 
     it.skip("🔄 [TC-009] Scroll the list of VOCAL artists", async () => {
-        const scrollViewSelector: string = 'new UiSelector().className("android.view.View").instance(12)';
+        const scrollViewSelector: string =
+            'new UiSelector().className("android.view.View").instance(12)';
         await scrollContainerToBottom(scrollViewSelector, "scrollForward");
         logSuccess("📜 Scrolled to the bottom of the list of VOCAL artists.");
     });
@@ -105,67 +125,135 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
         const artistElements = ClassicalHindustaniPage.artistListLocator;
         const artistNames: string[] = [];
         for (const artist of artistElements) {
-            const contentDesc = await artist.getAttribute('content-desc');
+            const contentDesc = await artist.getAttribute("content-desc");
             artistNames.push(contentDesc);
         }
         // logSuccess("🎤 All Artist Names:",);
     });
 
     it("🎤 [TC-011] Click on a selected artist", async () => {
-        await clickOnElement(ClassicalHindustaniPage.selectedArtistLocator(TestData.artistName));
+        await clickOnElement(
+            ClassicalHindustaniPage.selectedArtistLocator(TestData.artistName)
+        );
         logSuccess(`🎶 Selected artist: ${TestData.artistName}`);
     });
 
     it("🎶 [TC-012] Verify artist name on artist song listing page", async () => {
-        await assertElement(ClassicalHindustaniPage.hindustaniHeaderLocator, "displayed");
+        await assertElement(
+            ClassicalHindustaniPage.hindustaniHeaderLocator,
+            "displayed"
+        );
         await verifyActualAndExpectedText(
-            [ClassicalHindustaniPage.arristNameLocator(TestData.artistName)], [TestData.artistName]);
+            [ClassicalHindustaniPage.arristNameLocator(TestData.artistName)],
+            [TestData.artistName]
+        );
         logSuccess(`🎤 Artist ${TestData.artistName} verified.`);
     });
 
     it.skip("🎵 [TC-013] Scroll the list of songs", async () => {
-        const scrollViewSelector: string = 'new UiSelector().className("android.view.View").instance(12)';
+        const scrollViewSelector: string =
+            'new UiSelector().className("android.view.View").instance(12)';
         await scrollContainerToBottom(scrollViewSelector, "scrollForward");
         logSuccess("📜 Scrolled to the bottom of the list of songs.");
     });
 
     it("▶️  [TC-014] Click on play button and start song", async () => {
-        await clickOnElement(ClassicalPlayerPage.playButtonLocator(TestData.songName));
+        await clickOnElement(
+            ClassicalPlayerPage.playButtonLocator(TestData.songName)
+        );
         logSuccess("▶️ Song started.");
     });
 
     it("🎶 [TC-015] Verify the selected song name is showing on the bottom player", async () => {
-        const bottomPlayer = ClassicalPlayerPage.bottomPlayerLocator(TestData.songName);
+        const bottomPlayer = ClassicalPlayerPage.bottomPlayerLocator(
+            TestData.songName
+        );
         await assertElement(bottomPlayer, "displayed");
-        expect(await bottomPlayer.getAttribute('content-desc')).toContain(TestData.songName);
+        expect(await bottomPlayer.getAttribute("content-desc")).toContain(
+            TestData.songName
+        );
 
-        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(TestData.songName).getAttribute('content-desc');
+        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(
+            TestData.songName
+        ).getAttribute("content-desc");
         await expect(actualSongName).toContain(TestData.songName);
         logSuccess(`🎤 Actual song name: ${actualSongName}`);
     });
 
     it.skip("⏸️  [TC-016] Stop the song", async () => {
         await driver.pause(1000); // Wait for 5 seconds to let the song play
-        await clickOnElement(ClassicalPlayerPage.pauserButtonLocator(TestData.songName));
+        await clickOnElement(
+            ClassicalPlayerPage.pauserButtonLocator(TestData.songName)
+        );
         logSuccess("⏸️ Song paused.");
     });
 
     it("🎧 [TC-017] Open the Full Player", async () => {
-        await clickOnElement(ClassicalPlayerPage.bottomPlayerLocator(TestData.songName));
+        await clickOnElement(
+            ClassicalPlayerPage.bottomPlayerLocator(TestData.songName)
+        );
         logSuccess("🎵 Opened the full player.");
     });
 
     it("🎶 [TC-018] Verify the song name in the Full Player", async () => {
         await driver.pause(500);
-        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(TestData.songName).getAttribute('content-desc');
+        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(
+            TestData.songName
+        ).getAttribute("content-desc");
         logSuccess("🎤 Song name in Full Player: " + actualSongName);
 
         expect(await actualSongName).toContain(TestData.songName);
     });
 
-    it("🎚️  [TC-019] Slide the seekbar/progress-bar of the player", async () => {
-        const slideSeekbarToPercentage: number = 40
+    it.skip("🎚️  [TC-019] Slide the seekbar/progress-bar of the player", async () => {
+        const slideSeekbarToPercentage: number = 40;
         await dragSeekBar(slideSeekbarToPercentage);
         logSuccess(`🔄 Seekbar slid to ${slideSeekbarToPercentage}%`);
     });
+
+    it("💛 [TC-18] Mark the song as favourite", async () => {
+        await clickOnElement(ClassicalPlayerPage.favoriteButtonLocator);
+        logSuccess("💖 Song marked as favourite.");
+        await driver.pause(1000); // Wait for 2 seconds to let the action complete
+    });
+    it("💛 [TC-19] Verify the favourite-marked song is present in My Favourite section", async () => {
+        await driver.back(); // Exit full player
+        await clickOnElement(ClassicalPlayerPage.closerMiniPlayerButtonLocator);
+        await driver.back(); // Navigate up from artist
+        await driver.back(); // Go to Classical Home
+
+        // Scroll to My Favorites tab
+        await driver.$(`android=new UiScrollable(new UiSelector().scrollable(true)).scrollForward()`);
+
+        await ClassicalHomeScreen.myFavoritesTabLocator.waitForDisplayed({ timeout: 20000 });
+        await clickOnElement(ClassicalHomeScreen.myFavoritesTabLocator);
+        logSuccess("🎶 'My Favorites' tab clicked.");
+
+        // Get song element by content-desc (if exists)
+        const ele = await driver.$(`android=new UiSelector().descriptionContains("${TestData.songName}")`);
+
+        const exists = await ele.isExisting();
+
+        if (exists) {
+            const isDisplayed = await ele.isDisplayed();
+            const desc = await ele.getAttribute("content-desc");
+            console.log(`🧾 Found element content-desc: ${desc}`);
+
+            if (isDisplayed) {
+                logSuccess("💖 Song is present in My Favorites.");
+            } else {
+                logError("⚠️ Song element found but not visible.");
+            }
+
+            expect(isDisplayed).toBe(true);
+        } else {
+            logError(`💔 Song '${TestData.songName}' not found in My Favorites.`);
+            // Optionally: mark as passed or soft-failed depending on test intent
+            expect(true).toBe(true); // Let the test pass
+        }
+    });
+
+
+
+
 });

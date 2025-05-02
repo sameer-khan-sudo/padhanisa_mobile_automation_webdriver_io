@@ -1,78 +1,92 @@
+import { off } from "process";
+
 class ClassicalPlayerPage {
-    public get seekBarLocator() {
-      return $(`android=android=new UiSelector().descriptionContains("%")`)
-    }
+  public get seekBarLocator() {
+    return $(`android=android=new UiSelector().descriptionContains("%")`);
+  }
 
-    public songNameFieldLocator(songName: string) : ChainablePromiseElement {
+  public songNameFieldLocator(songName: string): ChainablePromiseElement {
+    return $(
+      `android=new UiSelector().descriptionContains("${songName}").instance(0)`
+    );
+  }
 
-        return $(`android=new UiSelector().descriptionContains("${songName}").instance(0)`);
-      }
-      
-    public playButtonLocator(songName: string) {
-        return $(`android=new UiSelector().descriptionContains("${songName}").instance(0)`);
-    }
+  public playButtonLocator(songName: string) {
+    return $(
+      `android=new UiSelector().descriptionContains("${songName}").instance(0)`
+    );
+  }
 
-    public pauserButtonLocator(songName: string) {
-        return $(`android=new UiSelector().descriptionContains("${songName}").instance(0)`);
-    }
+  public pauserButtonLocator(songName: string) {
+    return $(
+      `android=new UiSelector().descriptionContains("${songName}").instance(0)`
+    );
+  }
 
-    public bottomPlayerLocator(songName: string) {
-        return $(`android=new UiSelector().descriptionContains("${songName}").instance(1)`);
-    }
+  public bottomPlayerLocator(songName: string) {
+    return $(
+      `android=new UiSelector().descriptionContains("${songName}").instance(1)`
+    );
+  }
 
-    public get bottomPlayerPlayButtonLocator() {
-        return $(`android=new UiSelector().className("android.view.View").instance(21)`);
-    }
+  public get bottomPlayerPlayButtonLocator() {
+    return $(
+      `android=new UiSelector().className("android.view.View").instance(21)`
+    );
+  }
 
-    public get bottomPlayerPauseButtonLocator() {
-        return $(`android=new UiSelector().className("android.view.View").instance(21)`);
-    }
+  public get bottomPlayerPauseButtonLocator() {
+    return $(
+      `android=new UiSelector().className("android.view.View").instance(21)`
+    );
+  }
 
-    public fullPlayerSongNameLocator(songName: string) {
-        return $(`android=new UiSelector().description("${songName}")`)
-    }
+  public fullPlayerSongNameLocator(songName: string) {
+    return $(`android=new UiSelector().description("${songName}")`);
+  }
 
-    async slideSeekbarToPercentage(
-        seekbarElement: ChainablePromiseElement,
-        percentage: number
-      ): Promise<void> {
-        const rect = await seekbarElement.getWindowRect(); // or getWindowRect() if needed
-        const startX = rect.x;
-        const startY = rect.y + rect.height / 2;
-        const targetX = startX + rect.width * (percentage / 100);
-      
-        await driver.performActions([{
-          type: 'pointer',
-          id: 'finger1',
-          parameters: { pointerType: 'touch' },
-          actions: [
-            { type: 'pointerMove', duration: 0, x: startX, y: startY },
-            { type: 'pointerDown', button: 0 },
-            { type: 'pointerMove', duration: 300, x: targetX, y: startY },
-            { type: 'pointerUp', button: 0 },
-          ]
-        }]);
-      }
-      
-    // get nextButton() {
-    //     return $('button[title="Next"]');
-    // }
+  public get shareButtonLocator() {
+    return $(`android=new UiSelector().description("Share")`)
+  }
 
-    // get previousButton() {
-    //     return $('button[title="Previous"]');
-    // }
+  public get favoriteButtonLocator() {
+    return $(`android=new UiSelector().description("Favourite")`)
+  }
 
-    // get volumeSlider() {
-    //     return $('input[type="range"]');
-    // }
+  public get addToPlaylistButtonLocator() {
+    return $(`android=new UiSelector().description("Add")`)
+  }
 
-    // get currentTime() {
-    //     return $('.current-time');
-    // }
+  public get offlineButtonLocator() {
+    return $(`android=new UiSelector().description("Offline")`)
+  }
 
-    // get duration() {
-    //     return $('.duration');
-    // }
+  public get closerMiniPlayerButtonLocator() {
+    return $(`android=new UiSelector().description("Close")`)
+  }
+
+
+
+
+  // get nextButton() {
+  //     return $('button[title="Next"]');
+  // }
+
+  // get previousButton() {
+  //     return $('button[title="Previous"]');
+  // }
+
+  // get volumeSlider() {
+  //     return $('input[type="range"]');
+  // }
+
+  // get currentTime() {
+  //     return $('.current-time');
+  // }
+
+  // get duration() {
+  //     return $('.duration');
+  // }
 }
 
 export default new ClassicalPlayerPage();
