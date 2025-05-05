@@ -1,5 +1,3 @@
-import { clickOnElement } from "../../utils/commonUtils";
-
 class ClassicalHindustaniPage {
   // Locator for the Saregama Classical header
   public get saregamaClassicalHeaderLocator() {

@@ -148,7 +148,7 @@ export async function scrollContainerToBottom(uiSelector: string, scrollDirectio
     console.log(`Scrolling attempt ${++scrollCount}...`);
 
     //   await $(`android=new UiScrollable(${uiSelector}).scrollForward()`);
-    await $(`android=new UiScrollable(${uiSelector}).${scrollDirection}()`);
+    $(`android=new UiScrollable(${uiSelector}).${scrollDirection}()`);
     // await driver.pause(1000); // Give time for UI/content to update
 
     currentSource = await driver.getPageSource();
@@ -168,7 +168,8 @@ export async function dragSeekBar(percentage: number) {
 
     await driver.pause(500); // Wait for the seek bar to stabilize
 
-    const seekBar = await $(`android=new UiSelector().descriptionContains("%")`);
+    // const seekBar = await $(`android=new UiSelector().descriptionContains("%")`);
+    const seekBar = await $(`//android.widget.SeekBar[contains(@content-desc,"%")]`);
     const isDisplayed = await seekBar.isDisplayed();
 
     if (!isDisplayed) {
@@ -205,3 +206,5 @@ export async function dragSeekBar(percentage: number) {
     throw error; // Re-throw to allow test failure/reporting
   }
 }
+
+
