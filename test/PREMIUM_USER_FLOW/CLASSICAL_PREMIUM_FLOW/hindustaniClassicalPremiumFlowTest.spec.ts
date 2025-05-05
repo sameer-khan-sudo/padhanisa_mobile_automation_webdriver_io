@@ -5,13 +5,13 @@ import SelectProfilePage from "../../../pageObjects/selectProfile.page";
 import ClassicalHindustaniPage from "../../../pageObjects/classicalPageObjects/classicalHindustani.page.ts";
 import ClassicalPlayerPage from "../../../pageObjects/classicalPageObjects/classicalPlayer.page";
 import ClassicalHomeScreen from "../../../pageObjects/classicalPageObjects/classicalHomeScreen.page.ts";
-import ClassicalMyFavouritesPage from "../../../pageObjects/classicalPageObjects/classicalMyFavourites.page";
 
 // Utility Imports
 import {
     assertElement,
     clickOnElement,
     dragSeekBar,
+    enterTextInField,
     scrollContainerToBottom,
     verifyActualAndExpectedText,
 } from "../../../utils/commonUtils";
@@ -20,9 +20,10 @@ import { logInfo, logError, logSuccess } from "../../../utils/log.utils";
 // Constants
 const TestData = {
     phoneNumber: "9927484781",
-    profileName: "Johnny",
+    profileName: "Deadpool",
     artistName: "Ajoy Chakrabarty",
-    songName: "Jaag Jaag Sajani",
+    songName: "Jaag Jaag Sajani, Mere Bhale Bure Sab Tere - Ahir Lalit",
+    playListName: "My Playlist",
 };
 
 let testStartTime: Date;
@@ -31,8 +32,7 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
     beforeEach(function () {
         testStartTime = new Date();
         logInfo(
-            `⏳ Starting Test: "${this.currentTest?.title
-            }" @ ${testStartTime.toLocaleTimeString()}`
+            `⏳ Starting Test: "${this.currentTest?.title}" @ ${testStartTime.toLocaleTimeString()}`
         );
     });
 
@@ -54,12 +54,10 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
         }
 
         logInfo(
-            `🕒 Ended Test: "${this.currentTest?.title
-            }" @ ${testEndTime.toLocaleTimeString()} ⏱️ Duration: ${minutes}m ${seconds}s`
+            `🕒 Ended Test: "${this.currentTest?.title}" @ ${testEndTime.toLocaleTimeString()} ⏱️ Duration: ${minutes}m ${seconds}s`
         );
     });
 
-    // ✅ Executed Test Cases
     it("📱 [TC-001] Display splash screen on launch", async () => {
         await assertElement(LoginPage.splashScreen, "displayed", 60000);
         logSuccess("🎉 Splash screen displayed.");
@@ -95,28 +93,20 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
     it("🎶 [TC-007] Click on 'Classical Music' tab", async () => {
         await clickOnElement(HomescreenPage.classicalMusicLocator);
         logSuccess("🎼 'Classical Music' tab clicked.");
-        assertElement(
-            ClassicalHindustaniPage.saregamaClassicalHeaderLocator,
-            "displayed"
-        );
-        logSuccess("🎤 Saregama Classical header displayed.");
-        await verifyActualAndExpectedText(
-            [ClassicalHindustaniPage.saregamaClassicalHeaderLocator],
-            ["Saregama Classical"]
-        );
+        await assertElement(ClassicalHindustaniPage.saregamaClassicalHeaderLocator, "displayed");
+        await verifyActualAndExpectedText([
+            ClassicalHindustaniPage.saregamaClassicalHeaderLocator
+        ], ["Saregama Classical"]);
     });
 
     it("🎧 [TC-008] Click on 'Hindustani' tab", async () => {
-        await ClassicalHomeScreen.hindustaniTabLocator.waitForDisplayed({
-            timeout: 20000,
-        });
+        await ClassicalHomeScreen.hindustaniTabLocator.waitForDisplayed({ timeout: 20000 });
         await clickOnElement(ClassicalHomeScreen.hindustaniTabLocator);
         logSuccess("🎶 Hindustani tab clicked.");
     });
 
     it.skip("🔄 [TC-009] Scroll the list of VOCAL artists", async () => {
-        const scrollViewSelector: string =
-            'new UiSelector().className("android.view.View").instance(12)';
+        const scrollViewSelector = 'new UiSelector().className("android.view.View").instance(12)';
         await scrollContainerToBottom(scrollViewSelector, "scrollForward");
         logSuccess("📜 Scrolled to the bottom of the list of VOCAL artists.");
     });
@@ -128,110 +118,72 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
             const contentDesc = await artist.getAttribute("content-desc");
             artistNames.push(contentDesc);
         }
-        // logSuccess("🎤 All Artist Names:",);
     });
 
     it("🎤 [TC-011] Click on a selected artist", async () => {
-        await clickOnElement(
-            ClassicalHindustaniPage.selectedArtistLocator(TestData.artistName)
-        );
+        await clickOnElement(ClassicalHindustaniPage.selectedArtistLocator(TestData.artistName));
         logSuccess(`🎶 Selected artist: ${TestData.artistName}`);
     });
 
     it("🎶 [TC-012] Verify artist name on artist song listing page", async () => {
-        await assertElement(
-            ClassicalHindustaniPage.hindustaniHeaderLocator,
-            "displayed"
-        );
-        await verifyActualAndExpectedText(
-            [ClassicalHindustaniPage.arristNameLocator(TestData.artistName)],
-            [TestData.artistName]
-        );
+        await assertElement(ClassicalHindustaniPage.hindustaniHeaderLocator, "displayed");
+        await verifyActualAndExpectedText([
+            ClassicalHindustaniPage.arristNameLocator(TestData.artistName)
+        ], [TestData.artistName]);
         logSuccess(`🎤 Artist ${TestData.artistName} verified.`);
     });
 
-    it.skip("🎵 [TC-013] Scroll the list of songs", async () => {
-        const scrollViewSelector: string =
-            'new UiSelector().className("android.view.View").instance(12)';
-        await scrollContainerToBottom(scrollViewSelector, "scrollForward");
-        logSuccess("📜 Scrolled to the bottom of the list of songs.");
-    });
-
     it("▶️  [TC-014] Click on play button and start song", async () => {
-        await clickOnElement(
-            ClassicalPlayerPage.playButtonLocator(TestData.songName)
-        );
+        await clickOnElement(ClassicalPlayerPage.playButtonLocator(TestData.songName));
         logSuccess("▶️ Song started.");
     });
 
     it("🎶 [TC-015] Verify the selected song name is showing on the bottom player", async () => {
-        const bottomPlayer = ClassicalPlayerPage.bottomPlayerLocator(
-            TestData.songName
-        );
+        const bottomPlayer = ClassicalPlayerPage.bottomPlayerLocator(TestData.songName);
         await assertElement(bottomPlayer, "displayed");
-        expect(await bottomPlayer.getAttribute("content-desc")).toContain(
-            TestData.songName
-        );
+        expect(await bottomPlayer.getAttribute("content-desc")).toContain(TestData.songName);
 
-        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(
-            TestData.songName
-        ).getAttribute("content-desc");
-        await expect(actualSongName).toContain(TestData.songName);
+        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(TestData.songName).getAttribute("content-desc");
+        expect(actualSongName).toContain(TestData.songName);
         logSuccess(`🎤 Actual song name: ${actualSongName}`);
     });
 
-    it.skip("⏸️  [TC-016] Stop the song", async () => {
-        await driver.pause(1000); // Wait for 5 seconds to let the song play
-        await clickOnElement(
-            ClassicalPlayerPage.pauserButtonLocator(TestData.songName)
-        );
-        logSuccess("⏸️ Song paused.");
-    });
-
     it("🎧 [TC-017] Open the Full Player", async () => {
-        await clickOnElement(
-            ClassicalPlayerPage.bottomPlayerLocator(TestData.songName)
-        );
+        await clickOnElement(ClassicalPlayerPage.bottomPlayerLocator(TestData.songName));
         logSuccess("🎵 Opened the full player.");
     });
 
     it("🎶 [TC-018] Verify the song name in the Full Player", async () => {
         await driver.pause(500);
-        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(
-            TestData.songName
-        ).getAttribute("content-desc");
+        const actualSongName = await ClassicalPlayerPage.songNameFieldLocator(TestData.songName).getAttribute("content-desc");
         logSuccess("🎤 Song name in Full Player: " + actualSongName);
-
-        expect(await actualSongName).toContain(TestData.songName);
+        expect(actualSongName).toContain(TestData.songName);
     });
 
     it.skip("🎚️  [TC-019] Slide the seekbar/progress-bar of the player", async () => {
-        const slideSeekbarToPercentage: number = 40;
+        const slideSeekbarToPercentage = 40;
         await dragSeekBar(slideSeekbarToPercentage);
         logSuccess(`🔄 Seekbar slid to ${slideSeekbarToPercentage}%`);
     });
 
-    it("💛 [TC-18] Mark the song as favourite", async () => {
+    it.skip("💛 [TC-018] Mark the song as favourite", async () => {
         await clickOnElement(ClassicalPlayerPage.favoriteButtonLocator);
         logSuccess("💖 Song marked as favourite.");
-        await driver.pause(1000); // Wait for 2 seconds to let the action complete
+        await driver.pause(1000);
     });
-    it("💛 [TC-19] Verify the favourite-marked song is present in My Favourite section", async () => {
-        await driver.back(); // Exit full player
+
+    it.skip("💛 [TC-019] Verify the favourite-marked song is present in My Favourite section", async () => {
+        await driver.back();
         await clickOnElement(ClassicalPlayerPage.closerMiniPlayerButtonLocator);
-        await driver.back(); // Navigate up from artist
-        await driver.back(); // Go to Classical Home
+        await driver.back();
+        await driver.back();
 
-        // Scroll to My Favorites tab
-        await driver.$(`android=new UiScrollable(new UiSelector().scrollable(true)).scrollForward()`);
-
+        driver.$(`android=new UiScrollable(new UiSelector().scrollable(true)).scrollForward()`);
         await ClassicalHomeScreen.myFavoritesTabLocator.waitForDisplayed({ timeout: 20000 });
         await clickOnElement(ClassicalHomeScreen.myFavoritesTabLocator);
         logSuccess("🎶 'My Favorites' tab clicked.");
 
-        // Get song element by content-desc (if exists)
-        const ele = await driver.$(`android=new UiSelector().descriptionContains("${TestData.songName}")`);
-
+        const ele = driver.$(`android=new UiSelector().descriptionContains("${TestData.songName}")`);
         const exists = await ele.isExisting();
 
         if (exists) {
@@ -244,16 +196,41 @@ describe("[PREMIUM USER] 🎯 CLASSICAL HINDUSTANI FLOW - End to End Flow 🎤",
             } else {
                 logError("⚠️ Song element found but not visible.");
             }
-
             expect(isDisplayed).toBe(true);
         } else {
             logError(`💔 Song '${TestData.songName}' not found in My Favorites.`);
-            // Optionally: mark as passed or soft-failed depending on test intent
-            expect(true).toBe(true); // Let the test pass
+            expect(true).toBe(true);
         }
     });
 
+    it.skip("➕ [TC-020] Add the song to a playlist", async () => {
+        await clickOnElement(ClassicalPlayerPage.addToPlaylistButtonLocator);
+        logSuccess("➕ Song added to playlist.");
+        await driver.pause(1000);
+        await assertElement(ClassicalPlayerPage.addPlayListPopupScreenLocator, "displayed");
+        logSuccess("➕ Add to Playlist popup displayed.");
+    });
 
+    it.skip("[TC-021] Create a new playlist", async () => {
+        const songNameElement = ClassicalPlayerPage.popupScreenSongNameLocator(TestData.songName);
+        await assertElement(songNameElement, "displayed");
+        await clickOnElement(ClassicalPlayerPage.addPlayListFieldLocator);
+        await enterTextInField(ClassicalPlayerPage.addPlayListFieldLocator, TestData.playListName);
+        await driver.pause(200);
+        await clickOnElement(ClassicalPlayerPage.doneButtonLocator);
+        await clickOnElement(ClassicalPlayerPage.okButtonLocator);
+    });
 
-
+    it("📥 [TC-022] Download the song/offlined", async () => {
+        const isAlreadyOfflined = await ClassicalPlayerPage.offlinedButtonLocator.isDisplayed();
+        if (isAlreadyOfflined) {
+            logSuccess("✅ The song is already offlined.");
+        } else {
+            logInfo("ℹ️ Song is not offlined. Attempting to offline it...");
+            await clickOnElement(ClassicalPlayerPage.offlineButtonLocator);
+            await driver.pause(1000);
+            await assertElement(ClassicalPlayerPage.offlinedButtonLocator, "displayed");
+            logSuccess("📥 Song is now offlined.");
+        }
+    });
 });

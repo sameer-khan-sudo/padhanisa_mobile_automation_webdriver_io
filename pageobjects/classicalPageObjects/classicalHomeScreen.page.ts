@@ -8,7 +8,10 @@ class ClassicalHomeScreen {
   public get myFavoritesTabLocator() {
     return $('android=new UiSelector().className("android.widget.ImageView").instance(5)');
   }
-  
+
+  public get classicalHomeScreenLocator() {
+    return $('new UiSelector().className("android.view.View").instance(9)')
+  }
 }
 
 export default new ClassicalHomeScreen();

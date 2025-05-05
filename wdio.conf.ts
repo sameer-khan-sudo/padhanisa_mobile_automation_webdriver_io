@@ -59,11 +59,11 @@ export const config: WebdriverIO.Config = {
   // Reporters configuration
   reporters: [
     'spec', // Default spec reporter for console output
-    ['allure', {
-      outputDir: 'allure-results', // Directory to store Allure results
-      disableWebdriverStepsReporting: true, // Disable Webdriver steps reporting
-      disableWebdriverScreenshotsReporting: false, // Enable screenshots in Allure reports
-    }],
+    // ['allure', {
+    //   outputDir: 'allure-results', // Directory to store Allure results
+    //   disableWebdriverStepsReporting: true, // Disable Webdriver steps reporting
+    //   disableWebdriverScreenshotsReporting: false, // Enable screenshots in Allure reports
+    // }],
   ],
 
   // Mocha options
