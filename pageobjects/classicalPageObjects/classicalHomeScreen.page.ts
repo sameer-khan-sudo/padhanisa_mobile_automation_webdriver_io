@@ -20,6 +20,10 @@ class ClassicalHomeScreen {
   public get offlineTabLocator() {
     return $('android=new UiSelector().className("android.widget.ImageView").instance(6)');
   }
+
+  public get myPlaylisttabLocator(){
+    return $('android=new UiSelector().className("android.widget.ImageView").instance(7)')
+  }
 }
 
 export default new ClassicalHomeScreen();

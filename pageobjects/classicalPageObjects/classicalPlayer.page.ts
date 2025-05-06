@@ -94,6 +94,10 @@ class ClassicalPlayerPage {
   public get okButtonLocator() {
     return $(`android=new UiSelector().description("OK")`)
   }
+
+  public get alreadyPresentPlaylistLocator(){
+    return $('android=new UiSelector().descriptionContains("Play List is already exist")')
+  }
   // get nextButton() {
   //     return $('button[title="Next"]');
   // }
