@@ -13,7 +13,7 @@ import {
     clickOnElement,
     dragSeekBar,
     enterTextInField,
-    scrollContainerToBottom,
+    // scrollContainerToBottom,
     verifyActualAndExpectedText,
 } from "../../../utils/commonUtils";
 import { logSuccess } from "../../../utils/log.utils";
