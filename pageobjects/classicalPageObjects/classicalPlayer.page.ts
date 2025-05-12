@@ -98,6 +98,10 @@ class ClassicalPlayerPage {
   public get alreadyPresentPlaylistLocator(){
     return $('android=new UiSelector().descriptionContains("Play List is already exist")')
   }
+
+  public get saveVideoOfflinePopupScreenLocator(){
+    return $(`android=new UiSelector().description("Save Video Offline")`)
+  }
   // get nextButton() {
   //     return $('button[title="Next"]');
   // }

@@ -64,6 +64,18 @@ class ClassicalStudioPage {
         return $('android=new UiSelector().descriptionContains("VIDEOS")')
     }
 
+    public get filterByArtistesPopupScreen(){
+        return $('android=new UiSelector().description("Filter By Artistes")')
+    }
+
+    public get artistView(){
+        return (`android=new UiSelector().className("android.view.View").instance(5)`)
+    }
+
+    public artistLocator(artistName:string): ChainablePromiseElement {
+        return (`android=new UiSelector().description("${artistName}")`)
+    }
+
     public async dragPipWindown() {
         const pipWindow =  $(`android=new UiSelector().className("android.view.View").instance(22)`);
 
