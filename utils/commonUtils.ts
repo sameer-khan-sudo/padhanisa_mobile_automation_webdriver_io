@@ -134,24 +134,23 @@ export async function verifyActualAndExpectedText(textElementLocators: Chainable
   }
 }
 
-// Scroll the list of content
-export async function scrollContainerToBottom(uiSelector: string, scrollDirection: string) {
+
+// Scroll the scrollView
+export async function scrollContainerToBottom(uiSelector: string, scrollDirection: "scrollForward" | "scrollBackward") {
   let previousSource = '';
   let currentSource = '';
   let scrollCount = 0;
 
   do {
     previousSource = currentSource;
-    console.log(`Scrolling attempt ${++scrollCount}...`);
+    console.log(`🔁 Scrolling attempt ${++scrollCount}...`);
 
-    //   await $(`android=new UiScrollable(${uiSelector}).scrollForward()`);
-    $(`android=new UiScrollable(${uiSelector}).${scrollDirection}()`);
-    // await driver.pause(1000); // Give time for UI/content to update
+    await $(`android=new UiScrollable(${uiSelector}).${scrollDirection}()`);
 
     currentSource = await driver.getPageSource();
   } while (currentSource !== previousSource);
 
-  console.log("Reached the bottom of the container after", scrollCount, "scrolls.");
+  console.log("✅ Reached the bottom after", scrollCount, "scrolls.");
 }
 
 
@@ -189,6 +188,46 @@ export async function dragSeekBar(percentage: number) {
     ],
   }]);
   await driver.releaseActions();
+}
+
+
+// Scroll the list of Artistes and select artist during the scroll.
+export async function scrollAndSelectArtist(
+    artistName: string,
+    scrollContainerLocator: string,
+    scrollDirection: "scrollForward" | "scrollBackward" = "scrollForward"
+) {
+    const artistEl = $(`android=new UiSelector().description("${artistName}")`);
+
+    if (await artistEl.isDisplayed()) {
+        await clickOnElement(artistEl);
+        console.log(`✅ "${artistName}" was already visible and clicked.`);
+        return;
+    }
+
+    let previousPageSource = "";
+    let currentPageSource = await driver.getPageSource();
+    let scrollCount = 0;
+    const maxScrolls = 20;
+
+    while (scrollCount < maxScrolls && !(await artistEl.isDisplayed())) {
+        previousPageSource = currentPageSource;
+        scrollCount++;
+        console.log(`🔁 Scroll attempt #${scrollCount}`);
+
+        await $(`android=new UiScrollable(${scrollContainerLocator}).${scrollDirection}()`);
+        await driver.pause(500);
+
+        currentPageSource = await driver.getPageSource();
+        if (currentPageSource === previousPageSource) break;
+    }
+
+    if (await artistEl.isDisplayed()) {
+        await clickOnElement(artistEl);
+        console.log(`✅ "${artistName}" found and clicked after ${scrollCount} scrolls.`);
+    } else {
+        throw new Error(`❌ Artist "${artistName}" not found after ${scrollCount} scrolls.`);
+    }
 }
 
 

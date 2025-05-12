@@ -1,3 +1,6 @@
+import { assertElement, clickOnElement, verifyActualAndExpectedText } from "../../utils/commonUtils";
+import { logSuccess } from "../../utils/log.utils";
+
 class ClassicalStudioPage {
 
 
@@ -20,9 +23,9 @@ class ClassicalStudioPage {
         return $(`android=new UiSelector().descriptionContains("${videoName}")`)
     }
 
-    public get videoPlayerHeaderLocator() {
-        return $('android=new UiSelector().description("Video Player")')
-    }
+    // public get videoPlayerHeaderLocator() {
+    //     return $('android=new UiSelector().description("Video Player")')
+    // }
 
     public get videoPlayerWidowLocator() {
         return $('android=new UiSelector().descriptionContains(":")')
@@ -74,6 +77,51 @@ class ClassicalStudioPage {
 
     public artistLocator(artistName:string): ChainablePromiseElement {
         return (`android=new UiSelector().description("${artistName}")`)
+    }
+
+    public async scrollAndSelectVideo(selectVideo:string):ChainablePromiseElement{
+        const videoName = selectVideo;
+        const videoElement = this.videoListItemLocator(videoName);
+        const scrollViewSelector = 'new UiSelector().className("android.view.View").instance(11)';
+
+        async function isElementPresent(element: WebdriverIO.Element): Promise<boolean> {
+            return await element.isExisting();
+        }
+
+        async function scrollUntilVideoFound(uiSelector: string, scrollDirection: string): Promise<boolean> {
+            let previousSource = '';
+            let currentSource = '';
+            let scrollCount = 0;
+
+            do {
+                if (await isElementPresent(videoElement)) {
+                    return true;
+                }
+
+                previousSource = currentSource;
+                console.log(`Scrolling attempt ${++scrollCount}...`);
+
+                $(`android=new UiScrollable(${uiSelector}).${scrollDirection}()`);
+                currentSource = await driver.getPageSource();
+            } while (currentSource !== previousSource);
+
+            return await isElementPresent(videoElement);
+        }
+
+        const videoFound = await scrollUntilVideoFound(scrollViewSelector, "scrollForward");
+
+        if (!videoFound) {
+            throw new Error(`❌ Video "${videoName}" not found after scrolling.`);
+        }
+
+        await clickOnElement(videoElement);
+        logSuccess(`🎤 Video clicked: ${videoName}`);
+
+        // await assertElement(this.videoPlayerHeaderLocator, "displayed");
+        // await verifyActualAndExpectedText(
+        //     [this.videoPlayerHeaderLocator],
+        //     ["Video Player"]
+        // );
     }
 
     public async dragPipWindown() {

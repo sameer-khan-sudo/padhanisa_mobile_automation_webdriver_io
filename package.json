@@ -10,6 +10,7 @@
     "test:login": "wdio wdio.conf.ts --spec loginTest.spec.ts",
     "test:hindustaniClassicalPremiumFlowTest": "wdio wdio.conf.ts --spec hindustaniClassicalPremiumFlowTest.spec.ts",
     "test:classicalStudioPremiumFlowTestTest": "wdio wdio.conf.ts --spec classicalStudioPremiumFlowTest.spec.ts",
+    "test:classicalFusionPremiumFlowTest": "wdio wdio.conf.ts --spec classicalFusionPremiumFlowTest.spec.ts",
 
     "test:nonPremiumSingASong" : "wdio wdio.conf.ts --spec nonPrimiumSingASong.spec.ts",
     "allure:report": "allure generate ./allure-results --clean && allure open ./allure-report",

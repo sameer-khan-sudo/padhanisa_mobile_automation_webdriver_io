@@ -8,6 +8,9 @@ class ClassicalHomeScreen {
   public get classicalStudioTabLocator() {
     return $('android=new UiSelector().className("android.widget.ImageView").instance(2)');
   }
+  public get classicalFusionTabLocator() {
+    return $('android=new UiSelector().className(\"android.widget.ImageView\").instance(4)');
+  }
 
   public get myFavoritesTabLocator() {
     return $('android=new UiSelector().className("android.widget.ImageView").instance(5)');

@@ -15,7 +15,7 @@ class ClassicalPlayerPage {
     );
   }
 
-  public pauserButtonLocator(songName: string) {
+  public pauseButtonLocator(songName: string) {
     return $(
       `android=new UiSelector().descriptionContains("${songName}").instance(0)`
     );
@@ -102,9 +102,21 @@ class ClassicalPlayerPage {
   public get saveVideoOfflinePopupScreenLocator(){
     return $(`android=new UiSelector().description("Save Video Offline")`)
   }
-  // get nextButton() {
-  //     return $('button[title="Next"]');
-  // }
+  public get fullPlayerNextButtonLocator() {
+      return $('android=new UiSelector().className("android.view.View").instance(24)');
+  }
+  public get fullPlayerPreviousButtonLocator() {
+      return $('android=new UiSelector().className("android.view.View").instance(23)');
+  }
+
+  public get fullPlyerPauseButtonLocator(){
+    return $('android=new UiSelector().className("android.widget.ImageView").instance(10)')
+  }
+
+public get nextSongFieldLocator() {
+return $('(//android.view.View[contains(@content-desc," ")])[4]');
+}
+
 
   // get previousButton() {
   //     return $('button[title="Previous"]');
